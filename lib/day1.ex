@@ -13,7 +13,7 @@ defmodule Day1 do
   end
 
   def input_stream() do
-    "./input.txt"
+    "./data/day1.txt"
     |> File.stream!()
     |> Stream.map(fn text -> Integer.parse(text) |> elem(0) end)
   end
