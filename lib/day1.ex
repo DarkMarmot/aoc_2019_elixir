@@ -1,38 +1,30 @@
-defmodule Day1 do
+defmodule AOC.Day1 do
+
+  def run do
+    IO.inspect(part1())
+    IO.inspect(part2())
+  end
 
   def part1 do
-    input_stream()
-    |> Stream.map(&calc_fuel/1)
-    |> Enum.sum()
+    AOC.integer_stream(1)
+    |> Enum.reduce(0, fn mass, acc -> fuel(mass) + acc end)
   end
 
   def part2 do
-    input_stream()
-    |> Stream.map(&calc_deep_fuel/1)
-    |> Enum.sum()
+    AOC.integer_stream(1)
+    |> Stream.map(&fuel/1)
+    |> Enum.reduce(0, fn mass, acc -> add_fuel(mass) + acc end)
   end
 
-  def input_stream() do
-    "./data/day1.txt"
-    |> File.stream!()
-    |> Stream.map(fn text -> Integer.parse(text) |> elem(0) end)
-  end
-
-  def calc_fuel(mass) do
+  def fuel(mass) do
     max(0, trunc(mass / 3) - 2)
   end
 
-  def calc_deep_fuel(mass) do
-    calc_deep_fuel(mass, 0)
-  end
-
-  def calc_deep_fuel(0, total) do
-    total
-  end
-
-  def calc_deep_fuel(mass, total) do
-    new_mass =  calc_fuel(mass)
-    calc_deep_fuel(new_mass, total + new_mass)
+  def add_fuel(mass) do
+    case fuel(mass) do
+      0 -> 0
+      f -> mass + add_fuel(f)
+    end
   end
 
 end
